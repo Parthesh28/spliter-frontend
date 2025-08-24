@@ -23,7 +23,7 @@
     "typescript",
     "wallet-adapter"
   ],
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@coral-xyz/anchor": "^0.31.1",

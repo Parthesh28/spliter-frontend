@@ -14,25 +14,6 @@ export default function SplitPage({ params }: { params: Promise<{ id: string }> 
     const { getAllSplits, provider, contributeSplit, releaseSplit} = useSpliterProgram()
     const { data: programAccounts } = getAllSplits
 
-
-    // Use React.useMemo to memoize the id
-
-    // Alternative approach using useEffect for promise resolution
-    const [splitId, setSplitId] = React.useState<string | null>(null)
-
-    React.useEffect(() => {
-        const resolveParams = async () => {
-            try {
-                const resolved = await params
-                setSplitId(resolved.id)
-            } catch (error) {
-                console.error('Error resolving params:', error)
-            }
-        }
-
-        resolveParams()
-    }, [params])
-
     // Transform the data to find the specific split
     const split = React.useMemo(() => {
         if (!programAccounts || !Array.isArray(programAccounts) || !id) return null
