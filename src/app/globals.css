@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Nata+Sans:wght@100..900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -129,4 +130,9 @@
   height: auto !important;
   @apply !border !bg-background !shadow-xs hover:!bg-accent !text-accent-foreground hover:!text-accent-foreground dark:!bg-input/30 !border-input/10 dark:!border-input dark:hover:!bg-input/50;
   @apply !px-2 !py-[6px] !rounded-md !text-sm !font-semibold !shadow-sm !transition-all;
+}
+
+
+body{
+  font-family: 'Nata Sans';
 }
