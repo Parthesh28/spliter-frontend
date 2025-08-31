@@ -1,88 +1,49 @@
-# testing
+# Spliter dApp (Frontend)
 
-This is a Next.js app containing:
+Live Demo: [splitersol.vercel.app](https://splitersol.vercel.app)  
 
-- Tailwind CSS setup for styling
-- Useful wallet UI elements setup using [@solana/web3.js](https://www.npmjs.com/package/@solana/web3.js)
-- A basic Greeter Solana program written in Anchor
-- UI components for interacting with the Greeter program
+---
 
-## Getting Started
+## 📖 Overview
+Spliter is a Solana dApp frontend built with **Next.js**, **create-solana-dapp**, and **Anchor**.  
+It connects to the Spliter Anchor program on devnet and allows users to manage group payment splits transparently.
 
-### Installation
+---
 
-#### Download the template
+## ✨ Features
+- **Create Splits** → as an authority, define contributors, receiver, and target amount.  
+- **Contribute to Splits** → pay your share if you’re part of a split.  
+- **Release Splits** → authority can release funds to the receiver once all contributions are made.  
+- **Browse All Splits** on the homepage, with:  
+  - 🔍 **Search** → search splits by `split_name`.  
+  - 🎛 **Filters**:  
+    - By **payment status**: Paid / Unpaid.  
+    - By **release status**: Released / Unreleased.  
+    - By **role**: Creator / Contributor / Both.  
 
-```shell
-pnpm create solana-dapp@latest -t gh:solana-foundation/templates/web3js/testing
+This makes it easy for a user to quickly find the exact split they’re involved in.
+
+---
+
+## 📦 Prerequisites
+- Node.js (LTS recommended)  
+- Yarn or NPM  
+- A Solana wallet (Phantom, Solflare, Backpack, etc.)  
+
+---
+
+## ⚙️ Setup & Installation
+Clone the repo and install dependencies:
+```bash
+git clone https://github.com/<your-repo>/spliter-frontend.git
+cd spliter-frontend
+yarn install
+
 ```
 
-#### Install Dependencies
-
-```shell
-pnpm install
-```
-
-## Apps
-
-### anchor
-
-This is a Solana program written in Rust using the Anchor framework.
-
-#### Commands
-
-You can use any normal anchor commands. Either move to the `anchor` directory and run the `anchor` command or prefix the
-command with `pnpm`, eg: `pnpm anchor`.
-
-#### Sync the program id:
-
-Running this command will create a new keypair in the `anchor/target/deploy` directory and save the address to the
-Anchor config file and update the `declare_id!` macro in the `./src/lib.rs` file of the program.
-
-You will manually need to update the constant in `anchor/lib/counter-exports.ts` to match the new program id.
-
-```shell
-pnpm anchor keys sync
-```
-
-#### Build the program:
-
-```shell
-pnpm anchor-build
-```
-
-#### Start the test validator with the program deployed:
-
-```shell
-pnpm anchor-localnet
-```
-
-#### Run the tests
-
-```shell
-pnpm anchor-test
-```
-
-#### Deploy to Devnet
-
-```shell
-pnpm anchor deploy --provider.cluster devnet
-```
-
-### web
-
-This is a React app that uses the Anchor generated client to interact with the Solana program.
-
-#### Commands
-
-Start the web app
-
-```shell
-pnpm dev
-```
-
-Build the web app
-
-```shell
-pnpm build
+## Run the test server
+```bash
+yarn dev
+or 
+npm run dev
 ```
