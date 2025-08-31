@@ -1,31 +1,25 @@
 "use client"
 import React, { use } from 'react'
-import { useSpliterProgram } from '@/components/hooks/useAnchorQueries'
-import SplitDetailsPage from '@/components/split-details'
+import { useSpliterProgram } from '../../hooks/useAnchorQueries'
+import SplitDetailsPage from '@/components/splitDetails'
 import { useRouter } from 'next/navigation'
 import { PublicKey } from '@solana/web3.js'
 
-// Props interface for better type safety
 
-// This is the actual Next.js page component
 export default function SplitPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
     const router = useRouter()
     const { getAllSplits, provider, contributeSplit, releaseSplit} = useSpliterProgram()
     const { data: programAccounts } = getAllSplits
 
-    // Transform the data to find the specific split
     const split = React.useMemo(() => {
         if (!programAccounts || !Array.isArray(programAccounts) || !id) return null
 
-        // Find the split by matching the public key
         const splitAccount = programAccounts.find(
             account => account.publicKey.toString() === id
         )
 
         if (!splitAccount) return null
-
-        // Transform the data to match the component's expected format
         const { account, publicKey } = splitAccount
 
         return {
@@ -63,7 +57,6 @@ export default function SplitPage({ params }: { params: Promise<{ id: string }> 
         })
     }
 
-    // Loading state while resolving params
     if (!id) {
         return (
             <div className="w-full max-w-4xl mx-auto px-4 py-20">
@@ -77,13 +70,14 @@ export default function SplitPage({ params }: { params: Promise<{ id: string }> 
 
     if (!provider?.publicKey) {
         return (
-            <div className="w-full max-w-4xl mx-auto px-4 py-20">
+            <div className="flex w-full h-[calc(100vh-5rem)] items-center justify-center">
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2">
                         Please Connect Your Wallet
                     </h1>
                 </div>
             </div>
+
         )
     }
 

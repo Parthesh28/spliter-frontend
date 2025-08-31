@@ -14,9 +14,8 @@ import { Plus, X, Users, Wallet } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { PublicKey } from "@solana/web3.js"
 import * as anchor from '@coral-xyz/anchor'
-import { Spliter, useSpliterProgram } from "./hooks/useAnchorQueries"
+import { Spliter, useSpliterProgram } from "../app/hooks/useAnchorQueries"
 
-// Conversion constants
 const LAMPORTS_PER_SOL = 1_000_000_000
 
 export default function FabCreateSplit() {
@@ -32,7 +31,6 @@ export default function FabCreateSplit() {
 
     const { createSplit } = useSpliterProgram()
 
-    // Calculate total percentage whenever contributors change
     useEffect(() => {
         const total = contributors.reduce((sum, contributor) => {
             const percent = parseFloat(contributor.percent) || 0
@@ -46,7 +44,6 @@ export default function FabCreateSplit() {
         updated[index][field] = value
         setContributors(updated)
 
-        // Validate % field
         if (field === "percent") {
             const errors = [...percentageErrors]
             if (value && !/^\d*\.?\d*$/.test(value)) {
@@ -69,7 +66,6 @@ export default function FabCreateSplit() {
         setContributors(updated)
         setPercentageErrors([...percentageErrors, ""])
         if (equalSplit) {
-            // Need to distribute for the new array length
             distributeEqualSplitForArray(updated, updated.length)
         }
     }
@@ -87,15 +83,13 @@ export default function FabCreateSplit() {
     const distributeEqualSplitForArray = (targetArray: { wallet: string; percent: string }[], count: number) => {
         if (count === 0) return
 
-        // Calculate base percentage and remainder
-        const basePercent = Math.floor(10000 / count) / 100 // Use 10000 for better precision, then divide by 100
+      
+        const basePercent = Math.floor(10000 / count) / 100 
         const remainder = 100 - (basePercent * count)
 
-        // Distribute percentages
         const updatedContributors = targetArray.map((c, index) => {
-            if (index >= count) return c // Don't modify contributors beyond the count
+            if (index >= count) return c 
 
-            // Add the remainder to the first contributor(s) to make it exactly 100%
             const adjustedPercent = index < Math.round(remainder * 100)
                 ? (basePercent + 0.01).toFixed(2)
                 : basePercent.toFixed(2)
@@ -139,13 +133,12 @@ export default function FabCreateSplit() {
     const handleSubmit = async () => {
         if (!isFormValid()) return
 
-        // Convert SOL to lamports
         const solAmount = parseFloat(amount)
         const lamportAmount = Math.floor(solAmount * LAMPORTS_PER_SOL)
 
         const data = {
             splitName,
-            amount: lamportAmount, // Now in lamports
+            amount: lamportAmount, 
             receiver,
             contributors: contributors.map(c => ({
                 contributor: new PublicKey(c.wallet),
@@ -165,7 +158,6 @@ export default function FabCreateSplit() {
             total_amount: new anchor.BN(data.amount)
         })
 
-        // Reset form after successful creation
         setIsOpen(false)
         setSplitName("")
         setAmount("")
@@ -183,23 +175,28 @@ export default function FabCreateSplit() {
 
     return (
         <>
-            {/* Floating Action Button with improved positioning */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 shadow-lg hover:shadow-xl hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-95 transition-all duration-200 flex items-center justify-center z-50"
+                className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl bg-gradient-to-br from-zinc-100/90 to-zinc-200/80 dark:from-zinc-800/80 dark:to-zinc-900/70 backdrop-blur-xl border border-zinc-300/40 dark:border-zinc-700/30 text-zinc-700 dark:text-zinc-200 shadow-xl hover:shadow-2xl hover:from-zinc-200/95 hover:to-zinc-300/85 dark:hover:from-zinc-700/85 dark:hover:to-zinc-800/75 active:scale-95 transition-all duration-300 flex items-center justify-center z-40 group overflow-hidden"
                 style={{
-                    // This will make the FAB respect footer positioning
-                    // You can adjust this based on your footer height
                     marginBottom: 'max(1.5rem, env(keyboard-inset-height, 0px))',
+                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.05)'
                 }}
                 aria-label="Create new split"
             >
-                <Plus className="h-6 w-6" />
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent dark:from-white/10 pointer-events-none"></div>
+
+                {/* Icon with enhanced animation */}
+                <Plus className="h-6 w-6 relative z-10 group-hover:scale-110 group-hover:rotate-90 transition-all duration-300 ease-out drop-shadow-sm" />
+
+                {/* Hover ripple effect */}
+                <div className="absolute inset-0 rounded-2xl bg-zinc-400/20 dark:bg-zinc-600/20 scale-0 group-hover:scale-100 group-active:scale-110 transition-transform duration-300 ease-out"></div>
             </button>
 
-            {/* Dialog */}
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className="sm:max-w-[520px] bg-white dark:bg-zinc-900/90 backdrop-blur-xl border border-zinc-200 dark:border-zinc-700/60 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="sm:max-w-[520px] backdrop-blur-xl bg-zinc-200/50 border border-zinc-300/80 shadow-lg shadow-zinc-900/5
+          dark:bg-zinc-800/50 dark:border-zinc-700/50 dark:shadow-zinc-900/20 max-h-[90vh] overflow-y-auto">
                     <DialogHeader className="pb-4">
                         <DialogTitle className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                             <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
@@ -210,7 +207,6 @@ export default function FabCreateSplit() {
                     </DialogHeader>
 
                     <div className="space-y-6">
-                        {/* Split Name */}
                         <div className="space-y-2">
                             <Label htmlFor="splitName" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                 Split Name
@@ -225,7 +221,6 @@ export default function FabCreateSplit() {
                             />
                         </div>
 
-                        {/* Amount + Equal Split */}
                         <div className="grid grid-cols-3 gap-4">
                             <div className="col-span-2 space-y-2">
                                 <Label htmlFor="amount" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -240,13 +235,13 @@ export default function FabCreateSplit() {
                                     className="bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 focus:border-zinc-400 dark:focus:border-zinc-500"
                                 />
                                 {amountError && <p className="text-xs text-red-600 dark:text-red-400">{amountError}</p>}
-                                {/* Show lamport conversion for reference */}
                                 {amount && !amountError && parseFloat(amount) > 0 && (
                                     <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                         ≈ {(parseFloat(amount) * LAMPORTS_PER_SOL).toLocaleString()} lamports
                                     </p>
                                 )}
                             </div>
+                            
                             <div className="space-y-2">
                                 <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                     Equal Split
@@ -260,7 +255,6 @@ export default function FabCreateSplit() {
                             </div>
                         </div>
 
-                        {/* Receiver */}
                         <div className="space-y-2">
                             <Label htmlFor="receiver" className="text-sm font-medium text-zinc-700 dark:text-zinc-300 flex items-center gap-2">
                                 <Wallet className="w-4 h-4" />
@@ -276,7 +270,6 @@ export default function FabCreateSplit() {
                             />
                         </div>
 
-                        {/* Contributors */}
                         <div className="space-y-3">
                             <div className="flex items-center justify-between">
                                 <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300 flex items-center gap-2">
@@ -337,13 +330,12 @@ export default function FabCreateSplit() {
                                 ))}
                             </div>
 
-                            {/* Percentage validation message */}
                             {totalPercentage !== 100 && totalPercentage > 0 && (
                                 <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/50">
                                     <p className="text-xs text-amber-700 dark:text-amber-400">
                                         {totalPercentage > 100
-                                            ? "⚠️ Total percentage exceeds 100%. Please adjust the values."
-                                            : "⚠️ Total percentage must equal 100% to create the split."}
+                                            ? "Total percentage exceeds 100%. Please adjust the values."
+                                            : " Total percentage must equal 100% to create the split."}
                                     </p>
                                 </div>
                             )}
@@ -358,7 +350,6 @@ export default function FabCreateSplit() {
                             </Button>
                         </div>
 
-                        {/* Submit */}
                         <div className="pt-4 border-t border-zinc-200 dark:border-zinc-700">
                             <Button
                                 onClick={handleSubmit}

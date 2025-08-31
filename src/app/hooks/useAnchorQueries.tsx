@@ -1,13 +1,13 @@
 'use client'
 
-import { getSpliterProgram, getSpliterProgramId } from '../solana/anchor-provider'
+import { getSpliterProgram, getSpliterProgramId } from '../context/anchorProvider'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { Cluster, PublicKey, SystemProgram } from '@solana/web3.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { useCluster } from '../cluster/cluster-data-access'
-import { useAnchorProvider } from '../solana/solana-provider'
-import { useTransactionToast } from '../use-transaction-toast'
+import { useCluster } from '../context/clusterProvider'
+import { useAnchorProvider } from '../context/solanaProvider'
+import { useTransactionToast } from '../../components/transactionToast'
 import { toast } from 'sonner'
 import * as anchor from '@coral-xyz/anchor'
 import crypto from 'crypto'
@@ -28,7 +28,6 @@ export function useSpliterProgram() {
     const programId = useMemo(() => getSpliterProgramId("devnet" as Cluster), [])
     const program = useMemo(() => getSpliterProgram(provider, programId), [provider, programId])
 
-    // Helper function to invalidate and refetch all splits data
     const refreshSplitsData = () => {
         queryClient.invalidateQueries({ queryKey: ['get-all-splits'] })
         queryClient.invalidateQueries({ queryKey: ['get-program-account'] })
@@ -65,12 +64,10 @@ export function useSpliterProgram() {
             }).rpc()
         },
         onSuccess: (signature) => {
-            // Show success toast with custom message
             transactionToast(signature, {
                 title: 'Split Created Successfully! 🎉',
                 description: 'Your payment split is now live and ready for contributions'
             })
-            // Refresh the data to show the new split
             refreshSplitsData()
         },
         onError: (error) => {
@@ -100,12 +97,10 @@ export function useSpliterProgram() {
             }).rpc()
         },
         onSuccess: (signature) => {
-            // Show success toast with custom message
             transactionToast(signature, {
-                title: 'Contribution Successful! 💰',
+                title: 'Contribution Successful!',
                 description: 'Your contribution has been recorded on the blockchain'
             })
-            // Refresh the data to show updated contribution status
             refreshSplitsData()
         },
         onError: (error) => {
@@ -136,12 +131,10 @@ export function useSpliterProgram() {
             }).rpc()
         },
         onSuccess: (signature) => {
-            // Show success toast with custom message
             transactionToast(signature, {
-                title: 'Funds Released! 🚀',
+                title: 'Funds Released! ',
                 description: 'The split funds have been successfully released to the receiver'
             })
-            // Refresh the data to show updated release status
             refreshSplitsData()
         },
         onError: (error) => {

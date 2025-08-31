@@ -1,6 +1,20 @@
 import { toast } from 'sonner'
-import { ExplorerLink } from './cluster/cluster-ui'
 import { CheckCircle2, ExternalLink } from 'lucide-react'
+import { useCluster } from '@/app/context/clusterProvider';
+
+const ExplorerLink = ({ path, label, className }: { path: string; label: string; className?: string }) => {
+  const { getExplorerUrl } = useCluster()
+  return (
+    <a
+      href={getExplorerUrl(path)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className ? className : `link font-mono`}
+    >
+      {label}
+    </a>
+  )
+}
 
 export function useTransactionToast() {
   return (signature: string, options?: { title?: string; description?: string }) => {
@@ -29,7 +43,6 @@ export function useTransactionToast() {
   }
 }
 
-// Alternative version with different toast types
 export function useAdvancedTransactionToast() {
   const showSuccess = (signature: string, options?: { title?: string; description?: string }) => {
     toast.success(options?.title || 'Transaction Successful', {
@@ -42,8 +55,8 @@ export function useAdvancedTransactionToast() {
             <ExplorerLink
               path={`tx/${signature}`}
               label="View Transaction"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-100 transition-colors"/>
-              <ExternalLink className="w-3 h-3" />
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-100 transition-colors" />
+            <ExternalLink className="w-3 h-3" />
           </div>
         </div>
       ),
