@@ -1,5 +1,5 @@
 import React from 'react'
-import { Github, ExternalLink, Twitter, Coffee, Heart } from 'lucide-react'
+import { Github, ExternalLink, Twitter, Coffee} from 'lucide-react'
 
 export function Footer() {
   return (

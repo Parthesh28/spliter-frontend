@@ -228,7 +228,7 @@ export default function Home({
                 <span>Showing {filtered.length} split{filtered.length !== 1 ? 's' : ''} matching</span>
                 {query && (
                   <span className="font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-200/50 dark:bg-zinc-800/50 px-2 py-1 rounded-lg">
-                    "{query}"
+                    {query}
                   </span>
                 )}
               </div>

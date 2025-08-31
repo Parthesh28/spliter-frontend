@@ -1,6 +1,5 @@
 import { Split } from "lucide-react"
 import { WalletButton } from "../app/context/solanaProvider"
-import { ThemeSelect } from "./themeSelect"
 
 export default function Navbar() {
   return (

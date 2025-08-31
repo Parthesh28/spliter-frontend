@@ -16,7 +16,6 @@ import {
     Calendar,
     Target,
     DollarSign,
-    TrendingUp,
     Sparkles,
     Shield,
     Eye

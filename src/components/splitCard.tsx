@@ -1,10 +1,10 @@
 "use client"
 import React from "react"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Users, CheckCircle, Clock, Crown, User, ExternalLink, Wallet, TrendingUp } from "lucide-react"
+import { Users, CheckCircle, Clock, Crown, User, ExternalLink, Wallet } from "lucide-react"
 
 type TransformedContributor = {
     contributor: string
